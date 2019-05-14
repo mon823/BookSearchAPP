@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion "28.0.3"
+    useLibrary 'org.apache.http.legacy'
+
+    defaultConfig {
+        applicationId "kr.ac.jbnu.se.mm2019Group1"
+        minSdkVersion 21
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            release {
+                minifyEnabled true
+                proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                        'proguard-rules.pro'
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //noinspection GradleCompatible
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.loopj.android:android-async-http:1.4.6'
+
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
+    implementation 'com.squareup.okhttp:okhttp:2.7.5'
+
+
+
+    implementation 'org.apache.commons:commons-lang3:3.4'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'gun0912.ted:tedpermission:2.0.0'
+    implementation 'com.kakao.sdk:newtone:6.0.1'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.google.android.gms:play-services-identity:16.0.0'
+    implementation 'com.google.android.gms:play-services-plus:16.0.0'
+    implementation 'com.google.android.gms:play-services-gcm:16.1.0'
+
+    //firebase
+    implementation 'com.google.firebase:firebase-database:16.1.0' //12.0.1
+    implementation 'com.google.firebase:firebase-auth:16.2.1'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-messaging:17.6.0'
+    implementation 'com.google.firebase:firebase-firestore:18.2.0'
+
+
+    implementation 'com.google.android.gms:play-services-auth:16.0.1' //12.0.1
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
+}
+apply plugin: 'com.google.gms.google-services'
+

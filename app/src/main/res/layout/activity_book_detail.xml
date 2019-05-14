@@ -1,0 +1,240 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".BookListActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/ivBookCover"
+                android:layout_width="280dp"
+                android:layout_height="280dp"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/tvAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="22sp" />
+            <View
+                android:layout_width="280dp"
+                android:layout_height="1px"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/darker_gray" />
+
+            <Button
+                android:id="@+id/btnInterestBook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:background="@android:color/background_light"
+                android:text="관심도서 추가"
+                android:textSize="18sp"/>
+            <View
+                android:layout_width="280dp"
+                android:layout_height="1px"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/darker_gray" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="도서 출판사"
+                    android:textSize="18sp" />
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvPublisher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="280dp"
+                android:layout_height="1px"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="책 요약"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvContext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="280dp"
+                android:layout_height="1px"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="번역자"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvTranslators"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="280dp"
+                android:layout_height="1px"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="정가/ 판매가"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="280dp"
+                android:layout_height="1px"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/darker_gray" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="도서 상태"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="280dp"
+                android:layout_height="1px"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/darker_gray" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <Button
+                    android:id="@+id/LibraryButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/background_light"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:text="주변 도서관 정보"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/BtnBlog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@android:color/background_light"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:text="리뷰 정보"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="280dp"
+                android:layout_height="1px"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/tvLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="상세 링크"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="280dp"
+                android:layout_height="1px"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/darker_gray" />
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

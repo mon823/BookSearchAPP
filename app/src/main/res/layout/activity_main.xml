@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/Main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:lineSpacingExtra="36sp"
+        android:text="MAIN"
+        android:textSize="30sp" />
+
+
+    <Button
+        android:id="@+id/btnSearchBook"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="도서 검색"/>
+    <Button
+        android:id="@+id/btnCommunity"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="자유 게시판"/>
+
+    <Button
+        android:id="@+id/btnInterest"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="관심목록" />
+
+    <Button
+        android:id="@+id/btnMyPage"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="마이페이지"/>
+
+    <Button
+        android:id="@+id/community5"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="GoogleLogin"/>
+    <Button
+        android:id="@+id/community6"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="GoogleLogin"/>
+</LinearLayout>

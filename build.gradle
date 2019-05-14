@@ -1,0 +1,37 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+    }
+    repositories {
+        jcenter() // or mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.4.0'
+        classpath 'com.google.gms:google-services:4.2.0' // google-services plugin
+    }
+}
+subprojects {
+    repositories {
+        jcenter()
+        maven { url 'http://repo.maven.apache.org/maven2' }
+
+        mavenCentral()      // kakao api
+        maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' } // 추가
+    }
+}
+allprojects {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+    }
+}
