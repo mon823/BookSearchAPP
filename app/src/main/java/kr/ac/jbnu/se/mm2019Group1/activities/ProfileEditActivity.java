@@ -33,7 +33,6 @@ public class ProfileEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_edit);
 
 
-        etEmail = (EditText) findViewById(R.id.emailTextC);
         etPassword = (EditText) findViewById(R.id.passwordTextC);
         etName = (EditText) findViewById(R.id.nicknameTextC);
         btnchange = (Button)findViewById(R.id.chButton);
@@ -42,18 +41,18 @@ public class ProfileEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 user = LoginActivity.firebaseAuth.getCurrentUser();
-                user.updateEmail(etEmail.getText().toString())
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d("TAG", "User email address updated.");
-                                }
-                                else{
-                                    Log.d("TAG", "User email address not updated.");
-                                }
-                            }
-                        });
+//                user.updateEmail(etEmail.getText().toString())
+//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                if (task.isSuccessful()) {
+//                                    Log.d("TAG", "User email address updated.");
+//                                }
+//                                else{
+//                                    Log.d("TAG", "User email address not updated.");
+//                                }
+//                            }
+//                        });
 
                 user.updatePassword(etPassword.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<Void>() {

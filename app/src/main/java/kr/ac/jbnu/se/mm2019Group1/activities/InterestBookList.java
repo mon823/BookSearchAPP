@@ -60,6 +60,7 @@ public class InterestBookList extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        intersetBook.clear();
         makeBook();
     }
 
@@ -96,7 +97,7 @@ public class InterestBookList extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Launch the detail view passing book as an extra
                 Intent intent = new Intent(InterestBookList.this, BookDetailActivity.class);
-                intent.putExtra("Book", bookAdapter.getItem(position));
+                intent.putExtra("book", bookAdapter.getItem(position));
                 startActivity(intent);
             }
         });

@@ -50,6 +50,7 @@ public class CommunityListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        communities.clear();
         makeList();
     }
 
