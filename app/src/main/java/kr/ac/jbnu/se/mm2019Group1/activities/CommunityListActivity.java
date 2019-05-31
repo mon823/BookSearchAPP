@@ -31,7 +31,6 @@ public class CommunityListActivity extends AppCompatActivity {
     private CommunityAdapter communityAdapter;
     private ProgressBar progress;
     private Button btnWrite;
-    private Button btnLode;
     final ArrayList<Community> communities = new ArrayList<>();
 
     @Override
@@ -41,15 +40,21 @@ public class CommunityListActivity extends AppCompatActivity {
         BtnOnClickListener onClickListener = new BtnOnClickListener() ;
         btnWrite = (Button)findViewById(R.id.btnWrite);
         btnWrite.setOnClickListener(onClickListener);
-        btnLode = (Button) findViewById(R.id.btnLode);
-        btnLode.setOnClickListener(onClickListener);
         lvCommunity = (ListView) findViewById(R.id.lvCommunity);
-        makeList();
+        progress = (ProgressBar) findViewById(R.id.progress_community);
+
         setupBlogSelectedListener();
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        makeList();
+    }
+
     public void makeList(){
+        progress.setVisibility(View.VISIBLE);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Community").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -59,6 +64,7 @@ public class CommunityListActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 communities.add(document.toObject(Community.class));
                             }
+                            setupBlogSelectedListener();
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
                         }
@@ -75,10 +81,6 @@ public class CommunityListActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     break;
-                case R.id.btnLode:
-                    makeList();
-                    setupBlogSelectedListener();
-                    break;
             }
 
         }
@@ -87,7 +89,7 @@ public class CommunityListActivity extends AppCompatActivity {
     public void setupBlogSelectedListener() {
         communityAdapter = new CommunityAdapter(CommunityListActivity.this, communities);
         lvCommunity.setAdapter(communityAdapter);
-        progress = (ProgressBar) findViewById(R.id.progressBar_Blog);
+        progress.setVisibility(View.GONE);
         lvCommunity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -15,16 +15,24 @@
         android:textSize="30sp" />
 
 
+    <Switch
+        android:id="@+id/BgmSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="BGM  " />
+
     <Button
         android:id="@+id/btnSearchBook"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="도서 검색"/>
+
     <Button
         android:id="@+id/btnCommunity"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="자유 게시판"/>
+        android:text="자유 게시판" />
 
     <Button
         android:id="@+id/btnInterest"

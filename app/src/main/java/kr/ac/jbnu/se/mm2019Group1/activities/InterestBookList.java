@@ -31,29 +31,40 @@ public class InterestBookList extends AppCompatActivity {
     private BookAdapter bookAdapter;
     private ProgressBar progress;
     private ArrayList<Book> intersetBook;
-    private Button btnRelode;
+//    private Button btnRelode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interest_list);
         lvBook = (ListView) findViewById(R.id.lvBook);
-        btnRelode = (Button) findViewById(R.id.btnRelode);
-        btnRelode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                intersetBook.clear();
-                makeBook();
-                setupBookSelectedListener();
-            }
-        });
+//        btnRelode = (Button) findViewById(R.id.btnRelode);
+//        btnRelode.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                intersetBook.clear();
+//                makeBook();
+//                setupBookSelectedListener();
+//            }
+//        });
+        progress = (ProgressBar) findViewById(R.id.progress_book_interest);
         intersetBook = new ArrayList<Book>();
         intersetBook.clear();
-        makeBook();
+
         setupBookSelectedListener();
+
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        makeBook();
     }
 
     public void makeBook() {
+        progress.setVisibility(View.VISIBLE);
         String userUID = LoginActivity.userUUID;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("InterestBook").document(userUID);
@@ -65,16 +76,20 @@ public class InterestBookList extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 intersetBook.add(document.toObject(Book.class));
                             }
+                            setupBookSelectedListener();
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
                         }
                     }
                 });
+
+
     }
 
     public void setupBookSelectedListener() {
         bookAdapter = new BookAdapter(this, intersetBook);
         lvBook.setAdapter(bookAdapter);
+        progress.setVisibility(View.GONE);
         progress = (ProgressBar) findViewById(R.id.progress_book_interest);
         lvBook.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

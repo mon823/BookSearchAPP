@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import kr.ac.jbnu.se.mm2019Group1.R;
+import kr.ac.jbnu.se.mm2019Group1.Service.MusicService;
 
 public class MainActivity extends Activity {
 
@@ -16,6 +19,7 @@ public class MainActivity extends Activity {
     Button btnInterest;
     Button community5;
     Button community6;
+    Switch bgmSwitch;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +33,19 @@ public class MainActivity extends Activity {
         btnInterest = (Button) findViewById(R.id.btnInterest);
         community5 = (Button) findViewById(R.id.community5);
         community6 = (Button) findViewById(R.id.community6);
+
+        bgmSwitch = (Switch) findViewById(R.id.BgmSwitch);
+
+        bgmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            Intent intent = new Intent(MainActivity.this, MusicService.class);
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                intent.putExtra("MESSEAGE_KEY", b);
+
+                startService(intent);
+            }
+
+        });
         //1.값을 가져온다.
         //2.클릭을 감지한다.
         //3.1번의 값을 다음 액티비티로 넘기다.
@@ -38,6 +55,8 @@ public class MainActivity extends Activity {
         btnMyPage.setOnClickListener(btnOnClickListener);
         btnInterest.setOnClickListener(btnOnClickListener);
     }
+
+
 
 
 
@@ -66,4 +85,10 @@ public class MainActivity extends Activity {
         }
     };
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Intent intent = new Intent(MainActivity.this, MusicService.class);
+        stopService(intent);
+    }
 }

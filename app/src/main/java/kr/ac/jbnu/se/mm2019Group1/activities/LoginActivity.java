@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
             switch (view.getId()) {
                 case R.id.emailSignInButton:
                     Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+
                     startActivity(intent);
                     break;
                 case R.id.loginButton:
@@ -136,6 +137,8 @@ public class LoginActivity extends AppCompatActivity {
 //                            Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             updateUI(user);
                         } else {
@@ -171,6 +174,8 @@ public class LoginActivity extends AppCompatActivity {
 //                            Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             updateUI(user);
                         } else {
@@ -267,6 +272,8 @@ public class LoginActivity extends AppCompatActivity {
                 firebaseAuthWithGoogle(account);
 
                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
 
             } catch (ApiException e) {
