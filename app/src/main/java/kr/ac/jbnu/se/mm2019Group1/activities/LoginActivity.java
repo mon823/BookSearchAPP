@@ -1,9 +1,13 @@
 package kr.ac.jbnu.se.mm2019Group1.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,11 +41,11 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     private Button login;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        registerReceiver();
 
         firebaseAuth = FirebaseAuth.getInstance();
         userUUID = firebaseAuth.getUid();
@@ -89,6 +93,23 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
+    private void registerReceiver()
+    {
+        try
+        {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+            registerReceiver(new NetworkChangeReceiver(), intentFilter);
+//            intentFilter.addAction(NetworkChangeReceiver.NETWORK_CHANGE_ACTION);
+//            registerReceiver(internalNetworkChangeReceiver, intentFilter);
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
 
     @Override
     public void onStart() {
@@ -130,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
         // [END create_user_with_email]
     }
+
 
     private void signIn(String email, String password) {
 //        Log.d(TAG, "signIn:" + email);

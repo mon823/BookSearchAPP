@@ -44,6 +44,12 @@
         <activity android:name=".activities.CommunityListActivity"></activity>
         <activity android:name=".activities.CommunityDetailActivity"></activity>
         <activity android:name=".activities.CommunityWriteActivity"></activity>
+        <activity android:name=".activities.AlertDialogActivity"></activity>
+        <receiver android:name=".activities.NetworkChangeReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -53,6 +53,9 @@ public class BookListActivity extends AppCompatActivity {
         bookAdapter = new BookAdapter(this, aBooks);
         // attach the adapter to the ListView
         lvBooks.setAdapter(bookAdapter);
+
+
+
         progress = (ProgressBar) findViewById(R.id.progress_book);
         setupBookSelectedListener();
     }
