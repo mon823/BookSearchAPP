@@ -1,13 +1,10 @@
 package kr.ac.jbnu.se.mm2019Group1.activities;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,6 +42,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Intent itt = new Intent(this, SplashActivity.class); // 로딩화면 준비
+        startActivity(itt); // 스플레시 엑티비티 시작
+
+
         registerReceiver();
 
         firebaseAuth = FirebaseAuth.getInstance();

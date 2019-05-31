@@ -22,8 +22,8 @@
             android:value="@string/kakao_app_key" />
 
         <activity
-            android:name="kr.ac.jbnu.se.mm2019Group1.activities.SplashActivity"
-            android:theme="@style/splashTheme"
+            android:name="kr.ac.jbnu.se.mm2019Group1.activities.LoginActivity"
+
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +34,7 @@
         <activity android:name=".activities.BookDetailActivity" android:label="@string/title_activity_book_detail"></activity>
         <activity android:name=".activities.BookListActivity"></activity>
         <activity android:name=".activities.LibraryListActivity"></activity>
-        <activity android:name=".activities.LoginActivity"></activity>
+        <activity android:name=".activities.SplashActivity" android:theme="@style/splashTheme"></activity>
         <activity android:name=".activities.BlogListActivity"></activity>
         <activity android:name=".activities.VoiceRecoActivity"></activity>
         <activity android:name=".activities.RegisterActivity"></activity>

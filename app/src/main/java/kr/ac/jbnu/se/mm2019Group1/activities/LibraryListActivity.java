@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -44,6 +45,7 @@ public class LibraryListActivity extends AppCompatActivity {
     private ProgressBar progress;
     private double latitude;
     private double longitude;
+    private LocationManager lm;
 
     public double getLongitude() {
         return longitude;
@@ -66,6 +68,7 @@ public class LibraryListActivity extends AppCompatActivity {
             longitude = longitude_;
             latitude = latitude_;
             Log.d("location","실행행");
+
             fetchLibrary(" ");
         }
 
@@ -98,7 +101,8 @@ public class LibraryListActivity extends AppCompatActivity {
             return;
         }
 
-        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         getIntent().getSerializableExtra(BookDetailActivity.isbn);
 
@@ -106,22 +110,33 @@ public class LibraryListActivity extends AppCompatActivity {
 //        boolean isNetworkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 //
 //
-        Location lastKnownLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//
-//
-        if(lastKnownLocation != null){
-            double longitude_ = lastKnownLocation.getLongitude();
-            double latitude_ = lastKnownLocation.getLatitude();
-            Log.d("gps","isGPs"+lastKnownLocation.getLongitude());
-            longitude = longitude_;
-            Log.d("gps","isGPs"+longitude);
-            latitude = latitude_;
+//        Location lastKnownLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-        }
+//        if(lastKnownLocation != null){
+//            double longitude_ = lastKnownLocation.getLongitude();
+//            double latitude_ = lastKnownLocation.getLatitude();
+//            Log.d("gps","isGPs"+lastKnownLocation.getLongitude());
+//            longitude = longitude_;
+//            Log.d("gps","isGPs"+longitude);
+//            latitude = latitude_;
+//
+//        }
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                360000,
                 100,
+                1,
                 gpsLocationListener);
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자
+                100, // 통지사이의 최소 시간간격 (miliSecond)
+                1, // 통지사이의 최소 변경거리 (m)
+                gpsLocationListener);
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
 
         libraryList = (ListView) findViewById(R.id.libraryList);
         ArrayList<Library> arrLibrary = new ArrayList<Library>();
@@ -129,8 +144,6 @@ public class LibraryListActivity extends AppCompatActivity {
         libraryList.setAdapter(libraryAdapter);
 
         setupLibrarySelectedListener();
-
-
     }
 
     public void setupLibrarySelectedListener() {
@@ -147,7 +160,7 @@ public class LibraryListActivity extends AppCompatActivity {
 
     private void fetchLibrary(String query) {
         // Show progress bar before making network request
-
+        lm.removeUpdates(gpsLocationListener);
         client = new LibraryClient();
         findLocation();
         String location ="location=" +latitude +","+ longitude  + "&radius=5500&type=library&key=";
