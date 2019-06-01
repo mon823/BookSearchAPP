@@ -34,6 +34,10 @@ public class Community implements Serializable {
 
     public String mainText;
 
+    public String getWriter() {
+        return writer;
+    }
+
     public void setWriter(String writer) {
         this.writer = writer;
     }
@@ -50,6 +54,17 @@ public class Community implements Serializable {
 
     public String writerUid;
 
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    public String reference;
+
+
     public Community() {
     }
     public Community(String title,String date, String mainText, String writer,String writerUid) {
@@ -58,6 +73,15 @@ public class Community implements Serializable {
         this.mainText = mainText;
         this.writer = writer;
         this.writerUid = writerUid;
+    }
+
+    public Community(String title,String date, String mainText, String writer,String writerUid,String reference) {
+        this.title = title;
+        this.date = date;
+        this.mainText = mainText;
+        this.writer = writer;
+        this.writerUid = writerUid;
+        this.reference = reference;
     }
 
 }

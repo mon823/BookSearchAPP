@@ -5,6 +5,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +24,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import kr.ac.jbnu.se.mm2019Group1.R;
 
@@ -32,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
     static public FirebaseAuth firebaseAuth;
     static public String userUUID;
+    static public String userName;
     private SignInButton buttonGoogle;
     private Button emailSignInButton;
     private EditText etEmail;
@@ -51,6 +58,30 @@ public class LoginActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         userUUID = firebaseAuth.getUid();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("User").document(userUUID)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Map<String, Object> dataMap = new HashMap<>();
+                        dataMap.putAll(document.getData());
+                        userName = ""+dataMap.get("NickName");
+                        Log.d("TAG", "No such document"+userName);
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
+
+
+
 
         buttonGoogle = findViewById(R.id.googleSignInButton);
         emailSignInButton = findViewById(R.id.emailSignInButton);

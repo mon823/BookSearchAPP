@@ -62,8 +62,11 @@ public class CommunityListActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            Community community;
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                communities.add(document.toObject(Community.class));
+                                community =document.toObject(Community.class);
+                                community.setReference(document.getReference().getId());
+                                communities.add(community);
                             }
                             setupBlogSelectedListener();
                         } else {
@@ -97,6 +100,8 @@ public class CommunityListActivity extends AppCompatActivity {
                 // Launch the detail view passing book as an extra
                 Intent intent = new Intent(CommunityListActivity.this, CommunityDetailActivity.class);
                 intent.putExtra("Word", communityAdapter.getItem(position));
+//                intent.putExtra("Community",)
+//                intent.putExtra("writer", communityAdapter.getItem(position).writer);
                 startActivity(intent);
             }
         });
