@@ -16,7 +16,10 @@ import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -57,14 +60,16 @@ public class CommunityListActivity extends AppCompatActivity {
     public void makeList(){
         progress.setVisibility(View.VISIBLE);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Community").get()
+        CollectionReference docRef = db.collection("Community");
+        docRef.orderBy("date", Query.Direction.DESCENDING)
+                .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             Community community;
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                community =document.toObject(Community.class);
+                                community = document.toObject(Community.class);
                                 community.setReference(document.getReference().getId());
                                 communities.add(community);
                             }
