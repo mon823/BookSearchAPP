@@ -8,9 +8,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -47,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     private Button login;
     private CheckBox cblogin;
+    private ProgressBar pbLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,28 +65,6 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         userUUID = firebaseAuth.getUid();
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("User").document(userUUID)
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Map<String, Object> dataMap = new HashMap<>();
-                        dataMap.putAll(document.getData());
-                        userName = ""+dataMap.get("NickName");
-                        Log.d("TAG", "No such document"+userName);
-                    } else {
-                        Log.d("TAG", "No such document");
-                    }
-                } else {
-                    Log.d("TAG", "get failed with ", task.getException());
-                }
-            }
-        });
-
-
 
         buttonGoogle = findViewById(R.id.googleSignInButton);
         emailSignInButton = findViewById(R.id.emailSignInButton);
@@ -91,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.passwordText);
         login = findViewById(R.id.loginButton);
         cblogin = findViewById(R.id.cblogin);
+        pbLogin = findViewById(R.id.pblogin);
 
         LoginActivity.BtnOnClickListener BtnOnClickListener = new LoginActivity.BtnOnClickListener();
 
@@ -118,18 +100,37 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences sf = getSharedPreferences("sFile",MODE_PRIVATE);
-        String email = sf.getString("email","");
-        Log.d("for email",email);
+
+//        Intent signInIntent = googleSignInClient.getSignInIntent();
+//        startActivityForResult(signInIntent, RC_SIGN_IN);
+
+
+        SharedPreferences sf = getSharedPreferences("sFile", MODE_PRIVATE);
+        String email = sf.getString("email", "");
+        Log.d("for email", email);
         String pass = sf.getString("pass", "");
-        Log.d("for email",pass);
+        Log.d("for email", pass);
 
-        if(email.equals("")|| pass.equals("")){
+        if (email.equals("") || pass.equals("")) {
 
+        } else {
+            Log.d("for email", "pass");
+
+            pbLogin.setVisibility(View.VISIBLE);
+            disableEnableControls(false, (ViewGroup)findViewById(R.id.layoutLogin));
+
+
+            signIn(email, pass);
         }
-        else{
-            Log.d("for email","pass");
-            signIn(email,pass);
+
+        Boolean bool = sf.getBoolean("google", false);
+
+        if (bool == true) {
+            pbLogin.setVisibility(View.VISIBLE);
+            disableEnableControls(false, (ViewGroup)findViewById(R.id.layoutLogin));
+
+            Intent signInIntent = googleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
         }
     }
 
@@ -138,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.emailSignInButton:
-                    Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
 
                     startActivity(intent);
                     break;
@@ -148,21 +149,19 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         }
-    };
+    }
 
-    private void registerReceiver()
-    {
-        try
-        {
+    ;
+
+    private void registerReceiver() {
+        try {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
             registerReceiver(new NetworkChangeReceiver(), intentFilter);
 //            intentFilter.addAction(NetworkChangeReceiver.NETWORK_CHANGE_ACTION);
 //            registerReceiver(internalNetworkChangeReceiver, intentFilter);
 
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -190,7 +189,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
 //                            Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
-                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
@@ -229,10 +228,31 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = firebaseAuth.getCurrentUser();
 
 
-                            if(cblogin.isChecked() == true) {
-                                SharedPreferences sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            db.collection("User").document(userUUID)
+                                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            Map<String, Object> dataMap = new HashMap<>();
+                                            dataMap.putAll(document.getData());
+                                            userName = "" + dataMap.get("NickName");
+                                            Log.d("TAG", "No such document" + userName);
+                                        } else {
+                                            Log.d("TAG", "No such document");
+                                        }
+                                    } else {
+                                        Log.d("TAG", "get failed with ", task.getException());
+                                    }
+                                }
+                            });
+                            SharedPreferences sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                            if (cblogin.isChecked() == true) {
+
                                 String email = etEmail.getText().toString();
                                 String pass = etPassword.getText().toString();
 
@@ -241,8 +261,16 @@ public class LoginActivity extends AppCompatActivity {
 
                                 editor.commit();
                             }
+                            else{
+                                editor.putString("email", "");
+                                editor.putString("pass", "");
 
-                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                            }
+
+                            pbLogin.setVisibility(View.GONE);
+                            disableEnableControls(true, (ViewGroup)findViewById(R.id.layoutLogin));
+
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
@@ -369,7 +397,40 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // 로그인 성공
-                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+
+                            if (cblogin.isChecked() == true) {
+                                SharedPreferences sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean("google", true);
+                                editor.commit();
+                            }
+
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            db.collection("User").document(userUUID)
+                                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            Map<String, Object> dataMap = new HashMap<>();
+                                            dataMap.putAll(document.getData());
+                                            userName = "" + dataMap.get("NickName");
+                                            Log.d("TAG", "No such document" + userName);
+                                        } else {
+                                            Log.d("TAG", "No such document");
+                                        }
+                                    } else {
+                                        Log.d("TAG", "get failed with ", task.getException());
+                                    }
+                                }
+                            });
+
+                            pbLogin.setVisibility(View.GONE);
+                            disableEnableControls(true, (ViewGroup)findViewById(R.id.layoutLogin));
+
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
@@ -382,6 +443,18 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+    private void disableEnableControls(boolean enable, ViewGroup vg){
+        for (int i = 0; i < vg.getChildCount(); i++){
+            View child = vg.getChildAt(i);
+            child.setEnabled(enable);
+            if (child instanceof ViewGroup){
+                disableEnableControls(enable, (ViewGroup)child);
+            }
+        }
+    }
+
     // [END auth_fui_result]
 
 //    public void signOut() {

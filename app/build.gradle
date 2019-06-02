@@ -59,6 +59,9 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-auth:16.0.1' //12.0.1
     implementation 'de.hdodenhof:circleimageview:2.1.0'
+
+
+    implementation 'com.victor:lib:1.0.4'
 }
 apply plugin: 'com.google.gms.google-services'
 
