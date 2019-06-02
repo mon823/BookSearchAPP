@@ -75,7 +75,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 case R.id.BTcomment:
                     long now = System.currentTimeMillis();
                     Date date = new Date(now);
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                     String getTime = sdf.format(date);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
 

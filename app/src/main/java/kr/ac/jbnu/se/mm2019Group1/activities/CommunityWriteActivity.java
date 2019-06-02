@@ -67,7 +67,7 @@ public class CommunityWriteActivity extends AppCompatActivity {
 
                 long now = System.currentTimeMillis();
                 Date date = new Date(now);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 String getTime = sdf.format(date);
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 Community community = new Community(etTitleCommunity.getText().toString(),getTime,
