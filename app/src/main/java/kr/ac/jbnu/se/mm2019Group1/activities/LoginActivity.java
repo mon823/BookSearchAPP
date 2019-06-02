@@ -2,12 +2,14 @@ package kr.ac.jbnu.se.mm2019Group1.activities;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -44,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPassword;
     private Button login;
+    private CheckBox cblogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +85,12 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-
         buttonGoogle = findViewById(R.id.googleSignInButton);
         emailSignInButton = findViewById(R.id.emailSignInButton);
         etEmail = findViewById(R.id.emailText);
         etPassword = findViewById(R.id.passwordText);
         login = findViewById(R.id.loginButton);
+        cblogin = findViewById(R.id.cblogin);
 
         LoginActivity.BtnOnClickListener BtnOnClickListener = new LoginActivity.BtnOnClickListener();
 
@@ -99,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
 
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
+
         emailSignInButton.setOnClickListener(BtnOnClickListener);
         login.setOnClickListener(BtnOnClickListener);
         buttonGoogle.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +112,25 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sf = getSharedPreferences("sFile",MODE_PRIVATE);
+        String email = sf.getString("email","");
+        Log.d("for email",email);
+        String pass = sf.getString("pass", "");
+        Log.d("for email",pass);
+
+        if(email.equals("")|| pass.equals("")){
+
+        }
+        else{
+            Log.d("for email","pass");
+            signIn(email,pass);
+        }
     }
 
     class BtnOnClickListener implements Button.OnClickListener {
@@ -204,6 +227,21 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
 //                            Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
+
+
+                            if(cblogin.isChecked() == true) {
+                                SharedPreferences sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                String email = etEmail.getText().toString();
+                                String pass = etPassword.getText().toString();
+
+                                editor.putString("email", email);
+                                editor.putString("pass", pass);
+
+                                editor.commit();
+                            }
+
                             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -302,19 +340,16 @@ public class LoginActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
 
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-
             } catch (ApiException e) {
 
             }
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
+
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 firebaseAuth = FirebaseAuth.getInstance();
+
                 // ...
             } else {
                 // Sign in failed. If response is null the user canceled the
@@ -334,6 +369,10 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // 로그인 성공
+                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
                             Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
                         } else {
                             // 로그인 실패
@@ -399,4 +438,12 @@ public class LoginActivity extends AppCompatActivity {
 //                RC_SIGN_IN);
 //        // [END auth_fui_pp_tos]
 //    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+
+    }
 }
