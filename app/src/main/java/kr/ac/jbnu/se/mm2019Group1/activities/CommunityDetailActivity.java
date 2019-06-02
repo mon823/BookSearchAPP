@@ -79,7 +79,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                     String getTime = sdf.format(date);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                    Comment comment = new Comment(etComment.getText().toString(),getTime,LoginActivity.userName,LoginActivity.userUUID);
+                    Comment comment = new Comment(etComment.getText().toString(),getTime,MainActivity.userName,LoginActivity.userUUID);
                     db.collection("Community").document(community.getReference())
                             .collection("Comment")
                             .add(comment);

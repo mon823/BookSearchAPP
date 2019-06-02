@@ -1,5 +1,6 @@
 package kr.ac.jbnu.se.mm2019Group1.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -41,8 +42,8 @@ public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     private GoogleSignInClient googleSignInClient;
     static public FirebaseAuth firebaseAuth;
-    static public String userUUID;
-    static public String userName;
+    static public String userUUID ;
+
     private SignInButton buttonGoogle;
     private Button emailSignInButton;
     private EditText etEmail;
@@ -50,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button login;
     private CheckBox cblogin;
     private ProgressBar pbLogin;
+    static public NetworkChangeReceiver networkChangeReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("for email", "pass");
 
             pbLogin.setVisibility(View.VISIBLE);
-            disableEnableControls(false, (ViewGroup)findViewById(R.id.layoutLogin));
+            disableEnableControls(false, (ViewGroup) findViewById(R.id.layoutLogin));
 
 
             signIn(email, pass);
@@ -127,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (bool == true) {
             pbLogin.setVisibility(View.VISIBLE);
-            disableEnableControls(false, (ViewGroup)findViewById(R.id.layoutLogin));
+            disableEnableControls(false, (ViewGroup) findViewById(R.id.layoutLogin));
 
             Intent signInIntent = googleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -157,7 +159,8 @@ public class LoginActivity extends AppCompatActivity {
         try {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-            registerReceiver(new NetworkChangeReceiver(), intentFilter);
+            networkChangeReceiver = new NetworkChangeReceiver();
+            registerReceiver(networkChangeReceiver, intentFilter);
 //            intentFilter.addAction(NetworkChangeReceiver.NETWORK_CHANGE_ACTION);
 //            registerReceiver(internalNetworkChangeReceiver, intentFilter);
 
@@ -165,6 +168,8 @@ public class LoginActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
+
+
 
 
     @Override
@@ -190,7 +195,7 @@ public class LoginActivity extends AppCompatActivity {
 //                            Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             updateUI(user);
@@ -228,26 +233,26 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = firebaseAuth.getCurrentUser();
 
 
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            db.collection("User").document(userUUID)
-                                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot document = task.getResult();
-                                        if (document.exists()) {
-                                            Map<String, Object> dataMap = new HashMap<>();
-                                            dataMap.putAll(document.getData());
-                                            userName = "" + dataMap.get("NickName");
-                                            Log.d("TAG", "No such document" + userName);
-                                        } else {
-                                            Log.d("TAG", "No such document");
-                                        }
-                                    } else {
-                                        Log.d("TAG", "get failed with ", task.getException());
-                                    }
-                                }
-                            });
+//                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+//                            db.collection("User").document(userUUID)
+//                                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                    if (task.isSuccessful()) {
+//                                        DocumentSnapshot document = task.getResult();
+//                                        if (document.exists()) {
+//                                            Map<String, Object> dataMap = new HashMap<>();
+//                                            dataMap.putAll(document.getData());
+//                                            userName = "" + dataMap.get("NickName");
+//                                            Log.d("TAG", "No such document" + userName);
+//                                        } else {
+//                                            Log.d("TAG", "No such document");
+//                                        }
+//                                    } else {
+//                                        Log.d("TAG", "get failed with ", task.getException());
+//                                    }
+//                                }
+//                            });
                             SharedPreferences sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -260,15 +265,14 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.putString("pass", pass);
 
                                 editor.commit();
-                            }
-                            else{
+                            } else {
                                 editor.putString("email", "");
                                 editor.putString("pass", "");
 
                             }
 
                             pbLogin.setVisibility(View.GONE);
-                            disableEnableControls(true, (ViewGroup)findViewById(R.id.layoutLogin));
+                            disableEnableControls(true, (ViewGroup) findViewById(R.id.layoutLogin));
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -406,29 +410,29 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.commit();
                             }
 
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            db.collection("User").document(userUUID)
-                                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot document = task.getResult();
-                                        if (document.exists()) {
-                                            Map<String, Object> dataMap = new HashMap<>();
-                                            dataMap.putAll(document.getData());
-                                            userName = "" + dataMap.get("NickName");
-                                            Log.d("TAG", "No such document" + userName);
-                                        } else {
-                                            Log.d("TAG", "No such document");
-                                        }
-                                    } else {
-                                        Log.d("TAG", "get failed with ", task.getException());
-                                    }
-                                }
-                            });
+//                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+//                            db.collection("User").document(userUUID)
+//                                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                    if (task.isSuccessful()) {
+//                                        DocumentSnapshot document = task.getResult();
+//                                        if (document.exists()) {
+//                                            Map<String, Object> dataMap = new HashMap<>();
+//                                            dataMap.putAll(document.getData());
+//                                            userName = "" + dataMap.get("NickName");
+//                                            Log.d("TAG", "No such document" + userName);
+//                                        } else {
+//                                            Log.d("TAG", "No such document");
+//                                        }
+//                                    } else {
+//                                        Log.d("TAG", "get failed with ", task.getException());
+//                                    }
+//                                }
+//                            });
 
                             pbLogin.setVisibility(View.GONE);
-                            disableEnableControls(true, (ViewGroup)findViewById(R.id.layoutLogin));
+                            disableEnableControls(true, (ViewGroup) findViewById(R.id.layoutLogin));
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -445,12 +449,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void disableEnableControls(boolean enable, ViewGroup vg){
-        for (int i = 0; i < vg.getChildCount(); i++){
+    private void disableEnableControls(boolean enable, ViewGroup vg) {
+        for (int i = 0; i < vg.getChildCount(); i++) {
             View child = vg.getChildAt(i);
             child.setEnabled(enable);
-            if (child instanceof ViewGroup){
-                disableEnableControls(enable, (ViewGroup)child);
+            if (child instanceof ViewGroup) {
+                disableEnableControls(enable, (ViewGroup) child);
             }
         }
     }
@@ -518,5 +522,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onStop();
 
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(networkChangeReceiver);
     }
 }
