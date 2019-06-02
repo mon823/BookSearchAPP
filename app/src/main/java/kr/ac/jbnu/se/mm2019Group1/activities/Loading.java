@@ -14,7 +14,7 @@ public class Loading implements Runnable {
 
         try {
 
-            Thread.sleep(3000); // 실제 로딩시에는 로딩 작업을 처리
+            Thread.sleep(1000); // 실제 로딩시에는 로딩 작업을 처리
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

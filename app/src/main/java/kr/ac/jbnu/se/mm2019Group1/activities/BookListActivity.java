@@ -1,6 +1,7 @@
 package kr.ac.jbnu.se.mm2019Group1.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -8,17 +9,24 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import kr.ac.jbnu.se.mm2019Group1.R;
 import kr.ac.jbnu.se.mm2019Group1.adapters.BookAdapter;
+import kr.ac.jbnu.se.mm2019Group1.adapters.SearchAdapter;
 import kr.ac.jbnu.se.mm2019Group1.models.Book;
+import kr.ac.jbnu.se.mm2019Group1.models.Search;
 import kr.ac.jbnu.se.mm2019Group1.net.BookClient;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.kakao.sdk.newtoneapi.SpeechRecognizerActivity;
 import com.kakao.sdk.newtoneapi.SpeechRecognizerClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -28,37 +36,69 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-
+import java.util.List;
 
 
 public class BookListActivity extends AppCompatActivity {
     public static final String BOOK_DETAIL_KEY = "book";
     private ListView lvBooks;
     private BookAdapter bookAdapter;
+    private ListView lvSearch;
+    private SearchAdapter searchAdapter;
+    private ArrayList<Search> searchArrayList;
+    private ArrayList<Search> tmpList = new ArrayList<Search>();
     private BookClient client;
     private ProgressBar progress;
-
-
+    private Gson gson = new Gson();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
+
         lvBooks = (ListView) findViewById(R.id.lvBooks);
+        lvSearch = (ListView) findViewById(R.id.lvSearch);
 
         ArrayList<Book> aBooks = new ArrayList<Book>();
+        searchArrayList = new ArrayList<Search>();
+
+        SharedPreferences sp = getSharedPreferences("shared", MODE_PRIVATE);
+        String strContact = sp.getString("word", "");
+
+        Log.d("test4",strContact);
+
+        tmpList.clear();
+        if(!strContact.equals("")) {
+            Type listType = new TypeToken<ArrayList<Search>>() {
+            }.getType();
+            // 변환
+            ArrayList<Search> tmpList = gson.fromJson(strContact, listType);
+
+            int size = tmpList.size();
+            size--;
+            for(int i = 0; i < 5; i++){
+                searchArrayList.add(tmpList.get(i));
+            }
+        }
+
         // initialize the adapter
         bookAdapter = new BookAdapter(this, aBooks);
+        searchAdapter = new SearchAdapter(this,searchArrayList);
+
+
         // attach the adapter to the ListView
         lvBooks.setAdapter(bookAdapter);
-
-
+        lvSearch.setAdapter(searchAdapter);
 
         progress = (ProgressBar) findViewById(R.id.progress_book);
         setupBookSelectedListener();
     }
+
+
+
 
     public void setupBookSelectedListener() {
         lvBooks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -75,7 +115,9 @@ public class BookListActivity extends AppCompatActivity {
     // Executes an API call to the OpenLibrary search endpoint, parses the results
     // Converts them into an array of book objects and adds them to the adapter
     private void fetchBooks(String query) {
+        searchAdapter.notifyDataSetChanged();
         // Show progress bar before making network request
+        lvSearch.setVisibility(View.GONE);
         progress.setVisibility(ProgressBar.VISIBLE);
         client = new BookClient();
         client.getBooks(query, new JsonHttpResponseHandler() {
@@ -143,10 +185,68 @@ public class BookListActivity extends AppCompatActivity {
             }
         });
         final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setFocusableInTouchMode(true);
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b){
+                    lvSearch.setVisibility(View.GONE);
+                    Log.d("test","nope");
+
+                }
+                else{
+                    lvSearch.setVisibility(View.VISIBLE);
+                    Log.d("test","Yes");
+                }
+            }
+        });
+//        searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View view, boolean b) {
+//
+//                if(!hasWindowFocus()){
+//                    lvSearch.setVisibility(View.GONE);
+//                    Log.d("test","nope");
+//
+//                }
+//                else{
+//                    lvSearch.setVisibility(View.VISIBLE);
+//                    Log.d("test","Yes");
+//                }
+//
+//            }
+//        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // Fetch the data remotely
+                searchArrayList.add(0,new Search(query));
+                int size = searchArrayList.size();
+                size--;
+                Log.d("test0",size+"");
+                Log.d("test1",searchArrayList.get(0).getWord());
+                if(size >=4) {
+                    tmpList = (ArrayList<Search>) searchArrayList.clone();
+                    Log.d("test2",tmpList.get(0).getWord());
+                    searchArrayList.clear();
+                    for (int i = 0; i < 5; i++) {
+                            searchArrayList.add(tmpList.get(i));
+                    }
+                }
+
+
+//                searchArrayList.add(0,new Search(query));
+
+                gson = new GsonBuilder().create();
+                Type listType = new TypeToken<ArrayList<Search>>() {}.getType();
+                String json = gson.toJson(searchArrayList,listType);
+
+                SharedPreferences sp = getSharedPreferences("shared", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("word",json);
+                editor.commit();
+
                 fetchBooks(query);
                 // Reset SearchView
                 searchView.clearFocus();
@@ -162,6 +262,8 @@ public class BookListActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String s) {
                 return false;
             }
+
+
         });
         return true;
     }
