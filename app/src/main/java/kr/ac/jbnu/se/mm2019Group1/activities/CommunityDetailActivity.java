@@ -64,6 +64,9 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
     private  void loadCommunity(Community community){
         tvTitleCommunity.setText(community.getTitle());
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("result", community.getTitle());
+        setResult(RESULT_OK, resultIntent);
         tvContextCommunity.setText(community.getMainText());
         tvWriterCommunity.setText(community.getWriter());
 

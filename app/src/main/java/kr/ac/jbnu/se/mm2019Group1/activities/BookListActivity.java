@@ -2,6 +2,7 @@ package kr.ac.jbnu.se.mm2019Group1.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -51,6 +52,7 @@ public class BookListActivity extends AppCompatActivity {
     private ArrayList<Search> tmpList = new ArrayList<Search>();
     private BookClient client;
     private ProgressBar progress;
+    private String tmp;
     private Gson gson = new Gson();
 
 
@@ -98,7 +100,10 @@ public class BookListActivity extends AppCompatActivity {
     }
 
 
-
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
 
     public void setupBookSelectedListener() {
         lvBooks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -107,7 +112,10 @@ public class BookListActivity extends AppCompatActivity {
                 // Launch the detail view passing book as an extra
                 Intent intent = new Intent(BookListActivity.this, BookDetailActivity.class);
                 intent.putExtra(BOOK_DETAIL_KEY, bookAdapter.getItem(position));
-                startActivity(intent);
+                intent.putExtra("tmp",position);
+                parent.getChildAt(position).setBackgroundColor(Color.GRAY);
+                startActivityForResult(intent,3000);
+
             }
         });
     }
@@ -289,6 +297,10 @@ public class BookListActivity extends AppCompatActivity {
             switch (requestCode){
                 case 0:
                     fetchBooks(data.getStringArrayListExtra("result_array").get(0));
+                    break;
+                case 3000:
+                    tmp = data.getStringExtra("result");
+                    BookListActivity.this.setTitle(tmp);
                     break;
             }
         }

@@ -54,6 +54,7 @@ public class BookDetailActivity extends AppCompatActivity {
     private Button btnIntersetBook;
     private FirebaseUser user;
     private Book saveBook;
+    private int temp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,13 +75,18 @@ public class BookDetailActivity extends AppCompatActivity {
 
         // Use the book to populate the data into our views
         Book book = (Book) getIntent().getSerializableExtra(BookListActivity.BOOK_DETAIL_KEY);
+        temp = getIntent().getIntExtra("tmp", 0);
         loadBook(book);
-        BtnOnClickListener onClickListener = new BtnOnClickListener() ;
+        BtnOnClickListener onClickListener = new BtnOnClickListener();
         Button libraryBtn = findViewById(R.id.LibraryButton);
         libraryBtn.setOnClickListener(onClickListener);
         Button btnBlog = findViewById(R.id.BtnBlog);
-        btnIntersetBook .setOnClickListener(onClickListener);
+        btnIntersetBook.setOnClickListener(onClickListener);
         btnBlog.setOnClickListener(onClickListener);
+
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("result", book.getTitle());
+        setResult(RESULT_OK, resultIntent);
 
     }
 
@@ -106,16 +112,21 @@ public class BookDetailActivity extends AppCompatActivity {
             }
 
         }
-    };
+    }
 
-    private void saveInterestBook(){
+    ;
+
+    private void saveInterestBook() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         isbn = isbn.trim();
-        Log.d("TAG1","1"+isbn+"1");
+        Log.d("TAG1", "1" + isbn + "1");
         db.collection("InterestBook").document(user.getUid())
                 .collection("Book").document(isbn)
                 .set(saveBook);
-        Toast.makeText(BookDetailActivity.this, "저장 성공",Toast.LENGTH_SHORT).show();
+        Toast.makeText(BookDetailActivity.this, "저장 성공", Toast.LENGTH_SHORT).show();
+
+
+
 
     }
 

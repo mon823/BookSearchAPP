@@ -34,6 +34,7 @@ public class CommunityListActivity extends AppCompatActivity {
     private CommunityAdapter communityAdapter;
     private ProgressBar progress;
     private Button btnWrite;
+    private String tmp;
     final ArrayList<Community> communities = new ArrayList<>();
 
     @Override
@@ -107,7 +108,7 @@ public class CommunityListActivity extends AppCompatActivity {
                 intent.putExtra("Word", communityAdapter.getItem(position));
 //                intent.putExtra("Community",)
 //                intent.putExtra("writer", communityAdapter.getItem(position).writer);
-                startActivity(intent);
+                startActivityForResult(intent,3000);
             }
         });
     }
@@ -120,5 +121,17 @@ public class CommunityListActivity extends AppCompatActivity {
         final MenuItem searchItem = menu.findItem(R.id.action_share_blog);
         intent = getIntent();
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK){
+            switch (requestCode){
+                case 3000:
+                    tmp = data.getStringExtra("result");
+                    CommunityListActivity.this.setTitle(tmp);
+                    break;
+            }
+        }
     }
 }
