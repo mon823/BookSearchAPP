@@ -1,7 +1,5 @@
 package kr.ac.jbnu.se.mm2019Group1.activities;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -25,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.ac.jbnu.se.mm2019Group1.R;
+
 import kr.ac.jbnu.se.mm2019Group1.Service.MusicService;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         bgmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             Intent intent = new Intent(MainActivity.this, MusicService.class);
+
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 intent.putExtra("MESSEAGE_KEY", b);
@@ -63,6 +63,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
+//        Intent intent = new Intent(
+//                getApplicationContext(),//현재제어권자
+//                CommentService.class); // 이동할 컴포넌트
+//        startService(intent); // 서비스 시작
+
         //1.값을 가져온다.
         //2.클릭을 감지한다.
         //3.1번의 값을 다음 액티비티로 넘기다.
@@ -71,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         btnCommunity.setOnClickListener(btnOnClickListener);
         btnMyPage.setOnClickListener(btnOnClickListener);
         btnInterest.setOnClickListener(btnOnClickListener);
+        community5.setOnClickListener(btnOnClickListener);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("User").document(LoginActivity.firebaseAuth.getUid())
@@ -95,9 +102,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
     class BtnOnClickListener implements Button.OnClickListener {
         @Override
         public void onClick(View view) {
@@ -115,13 +119,19 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intentMyPage);
                     break;
                 case R.id.btnInterest:
-                    Intent intentInterest = new Intent(MainActivity.this,InterestBookList.class);
+                    Intent intentInterest = new Intent(MainActivity.this, InterestBookList.class);
                     startActivity(intentInterest);
+                    break;
+                case R.id.community5:
+                    Intent intent = new Intent(MainActivity.this, UsedBookActivity.class);
+                    startActivity(intent);
                     break;
             }
 
         }
-    };
+    }
+
+    ;
 
 
     public boolean onCreateOptionsMenu(Menu menu) {

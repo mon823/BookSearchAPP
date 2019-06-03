@@ -59,6 +59,11 @@ public class CommunityDetailActivity extends AppCompatActivity {
         tvWriterCommunity = (TextView) header.findViewById((R.id.tvWriterCommunity));
         lvCommnet.addHeaderView(header);
         loadCommunity(community);
+
+        commentAdapter = new CommentAdapter(CommunityDetailActivity.this, comments);
+
+        lvCommnet.setAdapter(commentAdapter);
+
         makeCommentList();
     }
 
@@ -97,6 +102,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
     private void makeCommentList(){
         comments.clear();
+        commentAdapter.clear();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Community").document(community.getReference())
                 .collection("Comment")
@@ -109,7 +115,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 comments.add(document.toObject(Comment.class));
                             }
-                            setComment();
+                            commentAdapter.notifyDataSetChanged();
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
                         }
@@ -119,9 +125,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
     }
 
     private void setComment(){
-        commentAdapter = new CommentAdapter(CommunityDetailActivity.this, comments);
 
-        lvCommnet.setAdapter(commentAdapter);
 
     }
 

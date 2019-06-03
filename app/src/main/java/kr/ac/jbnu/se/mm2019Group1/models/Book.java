@@ -123,8 +123,8 @@ public class Book implements Serializable {
             }
             if (jsonObject.has("price")) {
                 book.price = jsonObject.getString("price");
-                book.price = jsonObject.getString("sale_price");
             }
+            book.price = jsonObject.getString("sale_price");
             book.url = jsonObject.getString("url");
             book.publisher = jsonObject.getString("publisher");
             book.status = jsonObject.getString("status");

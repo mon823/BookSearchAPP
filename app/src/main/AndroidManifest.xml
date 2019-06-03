@@ -45,6 +45,7 @@
         <activity android:name=".activities.CommunityDetailActivity"></activity>
         <activity android:name=".activities.CommunityWriteActivity"></activity>
         <activity android:name=".activities.AlertDialogActivity"></activity>
+        <activity android:name=".activities.UsedBookActivity"></activity>
         <receiver android:name=".activities.NetworkChangeReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -52,6 +53,7 @@
         </receiver>
 
         <service android:name=".Service.MusicService"/>
+        <service android:name=".Service.CommentService"/>
     </application>
 
 </manifest>

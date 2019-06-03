@@ -10,26 +10,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-
-import kr.ac.jbnu.se.mm2019Group1.R;
-import kr.ac.jbnu.se.mm2019Group1.adapters.BookAdapter;
-import kr.ac.jbnu.se.mm2019Group1.adapters.SearchAdapter;
-import kr.ac.jbnu.se.mm2019Group1.models.Book;
-import kr.ac.jbnu.se.mm2019Group1.models.Search;
-import kr.ac.jbnu.se.mm2019Group1.net.BookClient;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.kakao.sdk.newtoneapi.SpeechRecognizerActivity;
-import com.kakao.sdk.newtoneapi.SpeechRecognizerClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -39,7 +27,13 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
+
+import kr.ac.jbnu.se.mm2019Group1.R;
+import kr.ac.jbnu.se.mm2019Group1.adapters.BookAdapter;
+import kr.ac.jbnu.se.mm2019Group1.adapters.SearchAdapter;
+import kr.ac.jbnu.se.mm2019Group1.models.Book;
+import kr.ac.jbnu.se.mm2019Group1.models.Search;
+import kr.ac.jbnu.se.mm2019Group1.net.BookClient;
 
 
 public class BookListActivity extends AppCompatActivity {
