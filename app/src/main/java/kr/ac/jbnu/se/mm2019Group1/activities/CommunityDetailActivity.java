@@ -15,16 +15,19 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import kr.ac.jbnu.se.mm2019Group1.R;
+import kr.ac.jbnu.se.mm2019Group1.Service.CommentService;
 import kr.ac.jbnu.se.mm2019Group1.adapters.CommentAdapter;
 import kr.ac.jbnu.se.mm2019Group1.models.Comment;
 import kr.ac.jbnu.se.mm2019Group1.models.Community;
@@ -87,13 +90,31 @@ public class CommunityDetailActivity extends AppCompatActivity {
                     String getTime = sdf.format(date);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+                    WriteBatch batch = db.batch();
                     Comment comment = new Comment(etComment.getText().toString(),getTime,MainActivity.userName,LoginActivity.userUUID);
-                    db.collection("Community").document(community.getReference())
-                            .collection("Comment")
-                            .add(comment);
+
+                    DocumentReference dr1 = db.collection("Community").document(community.getReference())
+                            .collection("Comment").document();
+
+                    batch.set(dr1,comment);
+
+                    DocumentReference dr2 = db.collection("Community").document(community.getReference());
+
+                    community.setCommentCount(community.getCommentCount()+1);
+
+                    batch.update(dr2,"commentCount",community.getCommentCount());
+                    batch.commit();
+
+//                    db.collection("Community").document(community.getReference())
+//                            .collection("Comment")
+//                            .add(comment);
 
                     etComment.setText("");
                     makeCommentList();
+//                    Intent intent = new Intent(
+//                            getApplicationContext(),//현재제어권자
+//                            CommentService.class); // 이동할 컴포넌트
+//                    startService(intent); // 서비스 시작
                     break;
             }
 
@@ -104,6 +125,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
         comments.clear();
         commentAdapter.clear();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         db.collection("Community").document(community.getReference())
                 .collection("Comment")
                 .orderBy("date", Query.Direction.ASCENDING)
@@ -121,6 +143,8 @@ public class CommunityDetailActivity extends AppCompatActivity {
                         }
                     }
                 });
+        comments.size();
+
 
     }
 

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import kr.ac.jbnu.se.mm2019Group1.R;
 
+import kr.ac.jbnu.se.mm2019Group1.Service.CommentService;
 import kr.ac.jbnu.se.mm2019Group1.Service.MusicService;
 
 public class MainActivity extends AppCompatActivity {
@@ -64,10 +65,10 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-//        Intent intent = new Intent(
-//                getApplicationContext(),//현재제어권자
-//                CommentService.class); // 이동할 컴포넌트
-//        startService(intent); // 서비스 시작
+        Intent intent = new Intent(
+                getApplicationContext(),//현재제어권자
+                CommentService.class); // 이동할 컴포넌트
+        startService(intent); // 서비스 시작
 
         //1.값을 가져온다.
         //2.클릭을 감지한다.

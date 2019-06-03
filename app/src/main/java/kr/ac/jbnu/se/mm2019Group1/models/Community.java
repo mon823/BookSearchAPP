@@ -64,10 +64,22 @@ public class Community implements Serializable {
 
     public String reference;
 
+    public int getCommentCount() {
+        return commentCount;
+    }
+
+
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    private int commentCount = 0;
+
 
     public Community() {
     }
-    public Community(String title,String date, String mainText, String writer,String writerUid) {
+
+    public Community(String title, String date, String mainText, String writer, String writerUid) {
         this.title = title;
         this.date = date;
         this.mainText = mainText;
@@ -75,13 +87,23 @@ public class Community implements Serializable {
         this.writerUid = writerUid;
     }
 
-    public Community(String title,String date, String mainText, String writer,String writerUid,String reference) {
+    public Community(String title, String date, String mainText, String writer, String writerUid, String reference) {
         this.title = title;
         this.date = date;
         this.mainText = mainText;
         this.writer = writer;
         this.writerUid = writerUid;
         this.reference = reference;
+    }
+
+    public Community(String title, String date, String mainText, String writer, String writerUid, String reference, int commentCount) {
+        this.title = title;
+        this.date = date;
+        this.mainText = mainText;
+        this.writer = writer;
+        this.writerUid = writerUid;
+        this.reference = reference;
+        this.commentCount = commentCount;
     }
 
 }
