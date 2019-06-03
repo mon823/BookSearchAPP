@@ -75,8 +75,14 @@ public class BookListActivity extends AppCompatActivity {
 
             int size = tmpList.size();
             size--;
-            for(int i = 0; i < 5; i++){
-                searchArrayList.add(tmpList.get(i));
+            if(size <5){
+                for (int i = 0; i < size; i++) {
+                    searchArrayList.add(tmpList.get(i));
+                }
+            }else {
+                for (int i = 0; i < 5; i++) {
+                    searchArrayList.add(tmpList.get(i));
+                }
             }
         }
 

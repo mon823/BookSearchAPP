@@ -38,15 +38,7 @@ public class InterestBookList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interest_list);
         lvBook = (ListView) findViewById(R.id.lvBook);
-//        btnRelode = (Button) findViewById(R.id.btnRelode);
-//        btnRelode.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                intersetBook.clear();
-//                makeBook();
-//                setupBookSelectedListener();
-//            }
-//        });
+
         progress = (ProgressBar) findViewById(R.id.progress_book_interest);
         intersetBook = new ArrayList<Book>();
         intersetBook.clear();

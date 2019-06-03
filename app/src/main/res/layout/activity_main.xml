@@ -49,7 +49,7 @@
         android:id="@+id/community5"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="GoogleLogin"/>
+        android:text="중고책 검색"/>
     <Button
         android:id="@+id/community6"
         android:layout_width="match_parent"
